@@ -2916,7 +2916,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x + r * pu.size, y - r * pu.size);
                     ctx.lineTo(x - r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 2:
@@ -2930,7 +2929,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x + r * pu.size, y - r * pu.size);
                     ctx.lineTo(x - r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 3:
@@ -2944,7 +2942,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x + r * pu.size, y - r * pu.size);
                     ctx.lineTo(x - r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 4:
@@ -2958,7 +2955,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x + r * pu.size, y - r * pu.size);
                     ctx.lineTo(x - r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 5:
@@ -2972,7 +2968,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x - r * pu.size, y - r * pu.size);
                     ctx.lineTo(x + r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 6:
@@ -2986,7 +2981,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x - r * pu.size, y - r * pu.size);
                     ctx.lineTo(x + r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 7:
@@ -3000,7 +2994,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x - r * pu.size, y - r * pu.size);
                     ctx.lineTo(x + r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 8:
@@ -3014,7 +3007,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x - r * pu.size, y - r * pu.size);
                     ctx.lineTo(x + r * pu.size, y + r * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 9:
@@ -3031,7 +3023,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x + (r2 - d) * pu.size, y - (r2 + d) * pu.size);
                     ctx.lineTo(x - (r2 + d) * pu.size, y + (r2 - d) * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
             case 0:
@@ -3048,7 +3039,6 @@ class Puzzle_square extends Puzzle {
                     ctx.moveTo(x - (r2 - d) * pu.size, y - (r2 + d) * pu.size);
                     ctx.lineTo(x + (r2 + d) * pu.size, y + (r2 - d) * pu.size);
                 }
-                ctx.closePath();
                 ctx.stroke();
                 break;
         }
