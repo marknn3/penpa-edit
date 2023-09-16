@@ -1684,6 +1684,10 @@ onload = function() {
                 UserSettings.draw_edges = !UserSettings.draw_edges;
                 e.preventDefault();
                 break;
+            case "fine_button":
+                UserSettings.draw_fine = !UserSettings.draw_fine;
+                e.preventDefault();
+                break;    
             case "quick_panel_toggle":
                 UserSettings.panel_shown = !UserSettings.panel_shown;
                 e.preventDefault();

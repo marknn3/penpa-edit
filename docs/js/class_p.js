@@ -162,7 +162,7 @@ class Puzzle {
             ["\"__a\"", "z_"],
             ["null", "zO"],
         ];
-        this.version = [3, 0, 8]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
+        this.version = [3, 0, 9]; // Also defined in HTML Script Loading in header tag to avoid Browser Cache Problems
         this.undoredo_disable = false;
         this.comp = false;
         this.multisolution = false;
@@ -9477,7 +9477,12 @@ class Puzzle {
                 this.redraw(); // This is needed so that the circle appears for aid
             }
         } else if (this.mouse_mode === "up") {
-            this.re_lineup_free(num);
+            if (this.last != -1 && this.point[this.last].type === 1 && this.point[num].type === 1) {
+                this.re_lineEup_free(num); // Move to freelineE
+            }
+            else {
+                this.re_lineup_free(num);
+            }
             this.drawing = false;
             this.freelinecircle_g = [-1, -1];
             this.last = -1;
@@ -10490,6 +10495,7 @@ class Puzzle {
             } else {
                 this[this.mode.qa][arr].slice(-1)[0].pop();
                 this.drawing = false;
+                this.redraw();
             }
         }
     }
@@ -12638,17 +12644,25 @@ class Puzzle {
         if (((this.mode[this.mode.qa].edit_mode === "line" || this.mode[this.mode.qa].edit_mode === "lineE") && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") || this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
             this.ctx.setLineDash([]);
             this.ctx.fillStyle = Color.TRANSPARENTBLACK;
-            this.ctx.strokeStyle = Color.BLUE_LIGHT;
-            this.ctx.lineWidth = 4;
-            if (this.freelinecircle_g[0] != -1) {
-                this.draw_circle(this.ctx, this.point[this.freelinecircle_g[0]].x, this.point[this.freelinecircle_g[0]].y, 0.3);
+            if (this.drawing && this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
+                this.ctx.strokeStyle = Color.RED;
             }
-            if (this.freelinecircle_g[1] != -1) {
-                this.draw_circle(this.ctx, this.point[this.freelinecircle_g[1]].x, this.point[this.freelinecircle_g[1]].y, 0.3);
-
+            else {
+                this.ctx.strokeStyle = Color.BLUE_LIGHT;
+            }
+            this.ctx.lineWidth = 4;
+            var i1 = this.freelinecircle_g[0];
+            var i2 = this.freelinecircle_g[1];
+            if (i1 != -1) {
+                var size = [0, 1].includes(this.point[i1].type) ? 0.3 : 0.2;
+                this.draw_circle(this.ctx, this.point[i1].x, this.point[i1].y, size);
+            }
+            if (i2 != -1) {
+                var size = [0, 1].includes(this.point[i2].type) ? 0.3 : 0.2;
+                this.draw_circle(this.ctx, this.point[i2].x, this.point[i2].y, size);
+            }
+            if (i1 != -1 && i2 != -1) {
                 // Preview the line
-                var i1 = this.freelinecircle_g[0];
-                var i2 = this.freelinecircle_g[1];
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.point[i1].x, this.point[i1].y);
                 this.ctx.lineTo(this.point[i2].x, this.point[i2].y);

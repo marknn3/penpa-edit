@@ -187,8 +187,10 @@ class Puzzle_square extends Puzzle {
                 break;
             case "symbol":
             case "move":
-                if (!UserSettings.draw_edges) {
-                    type = [0];
+                if (UserSettings.draw_fine) {
+                    type = [0, 1, 2, 3, 4, 5];
+                } else if (!UserSettings.draw_edges) {
+                    type = [0];                
                 } else {
                     type = [0, 1, 2, 3];
                 }
@@ -209,13 +211,20 @@ class Puzzle_square extends Puzzle {
                 }
                 break;
             case "line":
-                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") {
+                if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "4") { // Middle
                     type = [2, 3];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") {
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "2") { // Diagonal
                     type = [0, 1];
-                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "5") {
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "5") { // (X)
                     type = [0, 2, 3];
-                } else {
+                } else if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "3") { // Free
+                    if (UserSettings.draw_fine) {
+                        type = [0, 1, 2, 3, 4, 5];
+                    }
+                    else {
+                        type = [0];
+                    }
+                } else { // Normal
                     type = [0];
                 }
                 break;
@@ -244,7 +253,12 @@ class Puzzle_square extends Puzzle {
                 break;
             case "special":
                 if (this.mode[this.mode.qa][this.mode[this.mode.qa].edit_mode][0] === "polygon") {
-                    type = [1];
+                    if (UserSettings.draw_fine) {
+                        type = [0, 1, 2, 3, 4, 5];
+                    }
+                    else {
+                        type = [1];
+                    }
                 } else {
                     type = [0, 1];
                 }

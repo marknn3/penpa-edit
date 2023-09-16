@@ -318,6 +318,24 @@ const UserSettings = {
         return this._draw_edges;
     },
 
+    _draw_fine: false,
+    set draw_fine(newValue) {
+        const button = document.getElementById("fine_button");
+        this._draw_fine = newValue;
+        button.textContent = newValue ? "ON" : "OFF";
+
+        if (window.pu) {
+            if (!newValue) {
+                pu.cursol = pu.centerlist[0];
+            }
+            pu.type = pu.type_set();
+            pu.redraw();
+        }
+    },
+    get draw_fine() {
+        return this._draw_fine;
+    },
+
     _show_solution: true,
     set show_solution(newValue) {
         const button = document.getElementById("visibility_button");
