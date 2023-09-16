@@ -171,10 +171,12 @@ const UserSettings = {
             let mode = pu.mode[pu.mode.qa].edit_mode;
             if (this._custom_color_supported_grids[pu.gridtype] && this._custom_color_supported_modes[mode]) {
                 document.getElementById('style_special').style.display = 'inline';
+                document.getElementById('style_size').style.display = 'inline';
             }
         } else {
             // Off
             document.getElementById('style_special').style.display = 'none';
+            document.getElementById('style_size').style.display = 'none';
         }
         document.getElementById("custom_color_opt").value = this._custom_colors_on ? '2' : '1';
 

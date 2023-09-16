@@ -1451,7 +1451,14 @@ class Puzzle_square extends Puzzle {
                 p_y = this.point[i].y;
             }
             if (this[pu].symbol[i][2] === layer) {
+                this.ctx.save();
+                if (this[pu].symbol[i][3]) {
+                    this.ctx.translate(p_x, p_y);
+                    this.ctx.scale(this[pu].symbol[i][3], this[pu].symbol[i][3]);
+                    this.ctx.translate(-p_x, -p_y);
+                }
                 this.draw_symbol_select(this.ctx, p_x, p_y, this[pu].symbol[i][0], this[pu].symbol[i][1], i, pu);
+                this.ctx.restore();
             }
         }
     }

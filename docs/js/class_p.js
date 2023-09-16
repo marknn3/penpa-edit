@@ -2261,8 +2261,10 @@ class Puzzle {
         if ((UserSettings.custom_colors_on) && ((this.gridtype === "square" || this.gridtype === "sudoku" || this.gridtype === "kakuro" || this.gridtype === "hex")) &&
             (mode === "line" || mode === "lineE" || mode === "wall" || mode === "surface" || mode === "cage" || mode === "special" || mode === "symbol")) {
             document.getElementById('style_special').style.display = 'inline';
+            document.getElementById('style_size').style.display = 'inline';
         } else {
             document.getElementById('style_special').style.display = 'none';
+            document.getElementById('style_size').style.display = 'none';
         }
 
         // If panel is ON, show Mode info on header
@@ -2604,6 +2606,7 @@ class Puzzle {
         document.getElementById('style_number').style.display = 'none';
         document.getElementById('style_symbol').style.display = 'none';
         document.getElementById('style_special').style.display = 'none';
+        document.getElementById('style_size').style.display = 'none';
         document.getElementById('style_cage').style.display = 'none';
         document.getElementById('style_combi').style.display = 'none';
         document.getElementById('style_sudoku').style.display = 'none';

@@ -350,6 +350,9 @@ hr.newgridhrline {
 #style_special {
     padding-left: 3px;
 }
+#style_size {
+    padding-left: 10px;
+}
 
 .nb_button input[type=button] {
     margin: 3px;
@@ -633,6 +636,7 @@ body textarea {
 #panel_buttonc0,
 #edge_button0,
 #fine_button0,
+#style_size0,
 #quick_panel_toggle_label {
     width: auto;
     border: none;
