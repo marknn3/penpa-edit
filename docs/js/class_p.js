@@ -689,6 +689,72 @@ class Puzzle {
         }
     }
 
+    make_resize_point_translator(side, sign, originalnx0, originalny0) {
+        const stride = originalnx0 * originalny0;
+        if (side === 't') {
+            // Shift point to the next row
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let band = Math.floor(k / stride);
+                    let offset = [1, 2, 3, 4, 8, 8, 8, 8, 12, 12, 12, 12][band] * originalnx0 || 0;
+                    return k + offset * sign;
+                } 
+                else {
+                    return k;
+                }
+            }
+        }
+        if (side === 'b') {
+            // Maintain point in the same row
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let band = Math.floor(k / stride);
+                    let offset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][band] * originalnx0 || 0;
+                    return k + offset * sign;
+                } 
+                else {
+                    return k;
+                }
+            }
+        }
+        if (side === 'l') {
+            // Shift point to next column
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let factor = Math.floor(k / stride);
+                    let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
+                    let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
+                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);                                            
+                    let offset = (parseInt(normal_cursor / originalnx0) + 1) * pointsPerType + typeOffset * originalny0;
+                    return k + offset * sign;
+                } 
+                else {
+                    return k;
+                }
+            }
+        }
+        if (side === 'r') {
+            // Maintain point in the same column
+            return (k) => {
+                if (k >= 0) {
+                    k = parseInt(k);
+                    let factor = Math.floor(k / stride);
+                    let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
+                    let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
+                    let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);                        
+                    let offset = (parseInt(normal_cursor / originalnx0)) * pointsPerType + typeOffset * originalny0;                        
+                    return k + offset * sign;
+                } 
+                else {
+                    return k;
+                }
+            }
+        }
+    }
+
     resize_board(side, sign, celltype = 'black') {
         let originalspace = [...this.space];
         if (celltype === 'white') {
@@ -750,9 +816,10 @@ class Puzzle {
         let boxremove = old_idealcenterlist.filter(x => old_centerlist.indexOf(x) === -1);
 
         this.create_point();
-        this.centerlist = []
+        this.centerlist = [];
+        // Create full centerlist to allow correct board centering
         for (var j = 2; j < this.ny0 - 2; j++) {
-            for (var i = 2; i < this.nx0 - 2; i++) { // the top and left edges are unused
+            for (var i = 2; i < this.nx0 - 2; i++) {
                 this.centerlist.push(i + j * (this.nx0));
             }
         }
@@ -769,6 +836,8 @@ class Puzzle {
             this.point_reflect_UD();
         }
 
+        const translate = this.make_resize_point_translator(side, sign, originalnx0, originalny0);
+
         // Reset centerlist to match the margins
         this.centerlist = [] 
         for (let j = 2 + this.space[0]; j < this.ny0 - 2 - this.space[1]; j++) {
@@ -779,81 +848,27 @@ class Puzzle {
         // Remove Box elements
         for (let n = 0; n < boxremove.length; n++) {
             let num = boxremove[n];
-            let m = num + originalnx0 * sign;
+            let m = translate(num);
             let index = this.centerlist.indexOf(m);
             if (index !== -1) {
                 this.centerlist.splice(index, 1);
             }
         }
-
-        function makePointTranslate(side, sign) {
-            const stride = originalnx0 * originalny0;
-            if (side === 't') {
-                // Shift point to the next row
-                return (k) => {
-                    if (k >= 0) {
-                        k = parseInt(k);
-                        let band = Math.floor(k / stride);
-                        let offset = [1, 2, 3, 4, 8, 8, 8, 8, 12, 12, 12, 12][band] * originalnx0 || 0;
-                        return k + offset * sign;
-                    } 
-                    else {
-                        return k;
-                    }
-                }
-            }
-            if (side === 'b') {
-                // Maintain point in the same row
-                return (k) => {
-                    if (k >= 0) {
-                        k = parseInt(k);
-                        let band = Math.floor(k / stride);
-                        let offset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][band] * originalnx0 || 0;
-                        return k + offset * sign;
-                    } 
-                    else {
-                        return k;
-                    }
-                }
-            }
-            if (side === 'l') {
-                // Shift point to next column
-                return (k) => {
-                    if (k >= 0) {
-                        k = parseInt(k);
-                        let factor = Math.floor(k / stride);
-                        let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
-                        let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
-                        let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);                                            
-                        let offset = (parseInt(normal_cursor / originalnx0) + 1) * pointsPerType + typeOffset * originalny0;
-                        return k + offset * sign;
-                    } 
-                    else {
-                        return k;
-                    }
-                }
-            }
-            if (side === 'r') {
-                // Maintain point in the same column
-                return (k) => {
-                    if (k >= 0) {
-                        k = parseInt(k);
-                        let factor = Math.floor(k / stride);
-                        let typeOffset = [0, 1, 2, 3, 4, 4, 4, 4, 8, 8, 8, 8][factor] || 0;
-                        let pointsPerType = [1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4][factor] || 1;
-                        let normal_cursor = parseInt((k - typeOffset * stride) / pointsPerType);                        
-                        let offset = (parseInt(normal_cursor / originalnx0)) * pointsPerType + typeOffset * originalny0;                        
-                        return k + offset * sign;
-                    } 
-                    else {
-                        return k;
-                    }
-                }
-            }
-        }
-        let translate = makePointTranslate(side, sign);
-
         this.make_frameline();
+
+        this.translate_puzzle_elements(translate);
+    }
+
+    // Universal function to translate all elements in a puzzle:
+    // - cursor
+    // - selection
+    // - conflicts
+    // - all pu_q and pu_a puzzle elements
+    // - embedded soltion (single and multiple)
+    // 
+    // Currently used for resizing the board.
+    // Or in the future to insert or delete a row/col, given the proper translate function.
+    translate_puzzle_elements(translate) {
         this.cursol = translate(this.cursol);
         this.cursolS = translate(this.cursolS);
         this.freelinecircle_g[0] = translate(this.freelinecircle_g[0]);
@@ -864,6 +879,7 @@ class Puzzle {
         let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
         for (let i of pu_qa) {
+            // Translate redo/undo/replay buffer
             for (let commandstack of ['command_redo', 'command_undo', 'command_replay']) {
                 for (let a of this[i][commandstack].__a) {
                     if (a && a.length >= 4) {
@@ -887,6 +903,7 @@ class Puzzle {
                 }
             }
 
+            // Translate point features
             for (let feature of ['surface', 'number', 'numberS', 'symbol']) {
                 if (this[i][feature]) {
                     let temp = this[i][feature];
@@ -899,12 +916,13 @@ class Puzzle {
                 }
             }
 
-            for (let feature of ['line', 'lineE']) {
+            // Translate point-pair features
+            for (let feature of ['line', 'lineE', 'deletelineE', 'freeline', 'freelineE', 'wall', 'cage']) {
                 if (this[i][feature]) {
                     let temp = this[i][feature];
                     this[i][feature] = {};
                     for (let k in temp) {
-                        if (temp[k] === 98) {
+                        if (temp[k] === 98) { // Exception for 'x' mark
                             let m = translate(k);
                             this[i][feature][m] = temp[k];
                         } else {
@@ -917,28 +935,10 @@ class Puzzle {
                 }
             }
 
-            for (let feature of ['deletelineE', 'freeline', 'freelineE', 'wall', 'cage']) {
-                if (this[i][feature]) {
-                    let temp = this[i][feature];
-                    this[i][feature] = {};
-                    for (let k in temp) {
-                        if (temp[k] === 98) {
-                            let m = translate(k);
-                            this[i][feature][m] = temp[k];
-                        } else {
-                            let k1 = translate(k.split(",")[0]);
-                            let k2 = translate(k.split(",")[1]);
-                            let key = (k1.toString() + "," + k2.toString());
-                            this[i][feature][key] = temp[k];
-                        }
-                    }    
-                }
-            }
-
+            // Translate point array features
             for (let feature of ['thermo', 'nobulbthermo', 'arrows', 'direction', 'squareframe', 'killercages', 'polygon']) {
                 if (this[i][feature]) {
                     let temp = this[i][feature];
-                    this[i][feature] = {};
                     this[i][feature] = new Array(temp.length);
                     for (let k in temp) {
                         if (temp[k]) {
@@ -950,10 +950,9 @@ class Puzzle {
                     }
                 }
             }
-
         }
 
-        // Resize solution
+        // Translate solution
         if (this.solution) {
             let settingstatus_or = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
             
