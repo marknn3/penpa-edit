@@ -803,7 +803,7 @@ class Puzzle {
                 }
             }
             if (side === 'b') {
-                // Maintain point to be in the same row
+                // Maintain point in the same row
                 return (k) => {
                     if (k >= 0) {
                         k = parseInt(k);
@@ -858,11 +858,8 @@ class Puzzle {
         this.cursolS = translate(this.cursolS);
         this.freelinecircle_g[0] = translate(this.freelinecircle_g[0]);
         this.freelinecircle_g[1] = translate(this.freelinecircle_g[1]);
-        // reset the selection while resizing the grid
-        this.selection = [];
-        // for (let i in this.selection) {
-        //     this.selection[i] = translate(this.selection[i]);
-        // }
+        this.selection = this.selection.map(translate);
+        this.conflict_cells = this.conflict_cells.map(translate);
 
         let pu_qa = ["pu_q", "pu_a", "pu_q_col", "pu_a_col"];
 
@@ -958,7 +955,6 @@ class Puzzle {
 
         // Resize solution
         if (this.solution) {
-            let checkall = this.checkall_status();
             let settingstatus_or = document.getElementById("answersetting").getElementsByClassName("solcheck_or");
             
             if (!this.multisolution) {
